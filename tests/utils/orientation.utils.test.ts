@@ -7,7 +7,7 @@ describe('test Orientation Utils', () => {
             expect(isOrientation('N')).toBeTruthy();
             expect(isOrientation('S')).toBeTruthy();
             expect(isOrientation('E')).toBeTruthy();
-            expect(isOrientation('W')).toBeTruthy();
+            expect(isOrientation('O')).toBeTruthy();
         });
 
         it('should return false for invalid orientations', () => {
@@ -23,7 +23,7 @@ describe('test Orientation Utils', () => {
             expect(toOrientation('N')).toBe('N');
             expect(toOrientation('S')).toBe('S');
             expect(toOrientation('E')).toBe('E');
-            expect(toOrientation('W')).toBe('W');
+            expect(toOrientation('O')).toBe('O');
         });
 
         it('should return undefined for invalid inputs', () => {

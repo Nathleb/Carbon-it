@@ -12,12 +12,10 @@ export class GameLoopService {
     public startGame(gameState: GameState) {
         gameState = this.initializeGame(gameState);
         gameState = this.gameLoop(gameState);
-
-        gameState.retiredAdventurers.forEach(adv => console.log(adv));
     };
 
     /**
-     * time for adventurers up high in the mountain or lost outside of the map to retire
+     * time for adventurers up high in the mountain, that landed on top of their friends, or lost outside of the map to retire
      * @param gameState 
      * @returns 
      */
@@ -39,7 +37,6 @@ export class GameLoopService {
                 adventurers.push(adv);
             }
         });
-
         return new GameState(map, adventurers, retiredAdventurers, 0);
     }
 
@@ -56,6 +53,7 @@ export class GameLoopService {
         let nextTurnAdventurers: Adventurer[] = [];
 
         while (currentTurnAdventurers.length > 0) {
+            console.debug(map.toString());
             nextTurnAdventurers = [];
             currentTurnAdventurers.forEach(adv => {
                 const movement: Movement = adv.pathing[gameState.turn];
@@ -184,6 +182,12 @@ export class GameLoopService {
     }
 
 
+    /**
+     * Save the position of an adventurer entering a tile
+     * @param position 
+     * @param tileMap 
+     * @returns 
+     */
     private handleAdventurerEnteringTile(position: Point, tileMap: Map<string, Tile>): Map<string, Tile> {
         let tile = tileMap.get(position.toHash());
 
@@ -197,6 +201,12 @@ export class GameLoopService {
         return tileMap;
     }
 
+    /**
+     * Free a tile when an adventurer leaves it
+     * @param position 
+     * @param tileMap 
+     * @returns 
+     */
     private handleAdventurerLeavingTile(position: Point, tileMap: Map<string, Tile>): Map<string, Tile> {
         let tile = tileMap.get(position.toHash());
         if (tile) {

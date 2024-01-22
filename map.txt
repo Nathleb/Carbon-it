@@ -4,5 +4,5 @@ M - 2 - 1
 T - 0 - 3 - 2
 #comment
 T - 1 - 2 - 1
-A - Lara - 1 - 1 - S - AADADAGGA
-A - John - 1 - 1 - S - AADADAGGA
+A -  - 1 - 1 - E - AAAAA
+A - John - 0 - 1 - S - AGAGAGAGAGADDA

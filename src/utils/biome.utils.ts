@@ -8,5 +8,5 @@ export function toBiome(biome: string): Biome | undefined {
 }
 
 export function isBiome(biome: string): boolean {
-    return ["P", "M", "A"].includes(biome);
+    return ["P", "M"].includes(biome);
 }

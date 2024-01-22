@@ -3,14 +3,11 @@ import readline from 'node:readline';
 import { Adventurer } from "../entities/classes/adventurer";
 import { GameMap } from "../entities/classes/gameMap";
 import { GameState } from "../entities/classes/gameState";
-import { Movement } from "../entities/types/movement.type";
-import { Orientation } from "../entities/types/orientation.type";
 import { PARSECODE } from '../entities/enums/parseCode.enum';
 import { Point } from "../entities/classes/point";
 import { Tile } from "../entities/classes/tile";
-import { toOrientation } from '../utils/orientation.utils';
-import { toMovementArray } from '../utils/movement.utils';
 import { BIOME } from '../entities/types/biome.type';
+import { parseAdventurerLine, parseMapLine, parseMountainLine, parseTreasureLine } from '../managers/lineParser.manager';
 
 export class ParseSettingsService {
 
@@ -72,7 +69,7 @@ export class ParseSettingsService {
     }
 
     private parseLine(line: string, lineNumber: number): GameMap | Adventurer | [Point, Tile] | undefined {
-        let parsedLine: string[] = line.split(this.SEPARATOR);
+        let parsedLine: string[] = line.split(this.SEPARATOR).filter(str => str.length > 0);
 
         if (!parsedLine[0] || parsedLine[0].startsWith("#")) {
             return undefined;
@@ -80,96 +77,15 @@ export class ParseSettingsService {
 
         switch (parsedLine[0]) {
             case PARSECODE.Carte:
-                return this.parseMapLine(parsedLine, lineNumber);
+                return parseMapLine(parsedLine, lineNumber);
             case PARSECODE.Montagne:
-                return this.parseMountainLine(parsedLine, lineNumber);
+                return parseMountainLine(parsedLine, lineNumber);
             case PARSECODE.Tresor:
-                return this.parseTreasureLine(parsedLine, lineNumber);
+                return parseTreasureLine(parsedLine, lineNumber);
             case PARSECODE.Aventurier:
-                return this.parseAdventurerLine(parsedLine, lineNumber);
+                return parseAdventurerLine(parsedLine, lineNumber);
             default:
                 throw new Error(`${parsedLine[0]} is not a valid entry | line ${lineNumber}`);
         }
     }
-
-    private parseMapLine(parsedLine: string[], lineNumber: number): GameMap {
-        if (parsedLine.length !== 3) {
-            throw new Error(`Invalid entry | line ${lineNumber}`);
-        }
-        const width: number = parseInt(parsedLine[1]);
-        const height: number = parseInt(parsedLine[2]);
-
-        try {
-            return new GameMap(height, width, new Map<string, Tile>());
-        }
-        catch (error) {
-            throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
-        }
-    }
-
-    private parseTreasureLine(parsedLine: string[], lineNumber: number): [Point, Tile] {
-        if (parsedLine.length !== 4) {
-            throw new Error(`Invalid entry | line ${lineNumber}`);
-        }
-        const x: number = parseInt(parsedLine[1]);
-        const y: number = parseInt(parsedLine[2]);
-        const nbrTreasures: number = parseInt(parsedLine[3]);
-
-        try {
-            return [new Point(x, y), new Tile(BIOME.PLAINE, nbrTreasures, false)];
-        }
-        catch (error) {
-            throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
-        }
-    }
-
-    /**
-     * 
-     * @param parsedLine 
-     * @param lineNumber 
-     * @returns 
-     */
-    private parseAdventurerLine(parsedLine: string[], lineNumber: number): Adventurer {
-        if (parsedLine.length !== 6) {
-            throw new Error(`Invalid entry | line ${lineNumber}`);
-        }
-
-        const name: string = parsedLine[1];
-        const x: number = parseInt(parsedLine[2]);
-        const y: number = parseInt(parsedLine[3]);
-
-        const orientation: Orientation | undefined = toOrientation(parsedLine[4]);
-        const pathing: Movement[] | undefined = toMovementArray(parsedLine[5].split(""));
-
-        if (pathing === undefined || orientation === undefined) {
-            throw new Error(`Invalid entry | line ${lineNumber}`);
-        }
-        try {
-            return new Adventurer(name, new Point(x, y), orientation, pathing, 0, false);
-        }
-        catch (error) {
-            throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
-        }
-    }
-
-    /**
-     * 
-     * @param parsedLine 
-     * @param lineNumber 
-     * @returns Tuple Point Tile with mountain as biome
-     */
-    private parseMountainLine(parsedLine: string[], lineNumber: number): [Point, Tile] {
-        if (parsedLine.length !== 3) {
-            throw new Error(`Invalid entry | line ${lineNumber}`);
-        }
-        const x: number = parseInt(parsedLine[1]);
-        const y: number = parseInt(parsedLine[2]);
-        try {
-            return [new Point(x, y), new Tile(PARSECODE.Montagne, 0, false)];
-        }
-        catch (error) {
-            throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
-        }
-    }
-
 }
