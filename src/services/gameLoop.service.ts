@@ -121,6 +121,7 @@ export class GameLoopService {
                 break;
         }
         if (this.isAdventurerOutOfBond(newX, newY, map)) {
+            map.tileMap = this.handleAdventurerLeavingTile(adventurer.position, map.tileMap);
             return undefined;
         }
         const newPos = new Point(newX, newY);
