@@ -2,6 +2,12 @@
 
 ## Available commands
 
+- To download dependencies
+
+  ```
+      npm install
+  ```
+
 - To generate .js files in dist/ directory (needed for running the program or the tests)
 
 ```
