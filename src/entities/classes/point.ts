@@ -3,9 +3,6 @@ export class Point {
     private readonly _y: number;
 
     constructor(x: number, y: number) {
-        if (x < 0 || y < 0) {
-            throw new Error('Coordinates must be positive.');
-        }
         this._x = x;
         this._y = y;
     }

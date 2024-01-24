@@ -14,9 +14,3 @@ enlever les dependances dans les parser?
 rotate en double dans oriention utils
 
 faire le readme
-
-le log du dessin de la carte retirer le to string
-
-recup les valeurs du enum pour les utils
-
-enlever les conditions dans les classes pour ne les garder que dans le parser ???? faire des interfaces?

@@ -6,12 +6,13 @@ import { Tile } from "../entities/classes/tile";
 import { BIOME } from "../entities/types/biome.type";
 import { MOUVEMENT, Movement } from "../entities/types/movement.type";
 import { ORIENTATION, Orientation } from "../entities/types/orientation.type";
+import { logMap } from "./gameLog.service";
 
 export class GameLoopService {
 
     public startGame(gameState: GameState) {
         gameState = this.initializeGame(gameState);
-        gameState = this.gameLoop(gameState);
+        return this.gameLoop(gameState);
     };
 
     /**
@@ -48,12 +49,13 @@ export class GameLoopService {
      */
     private gameLoop(gameState: GameState): GameState {
         let map = new GameMap(gameState.gameMap.height, gameState.gameMap.width, new Map(gameState.gameMap.tileMap));
-        let retiredAdventurers = [...gameState.retiredAdventurers];
-        let currentTurnAdventurers: Adventurer[] = [...gameState.adventurers];
-        let nextTurnAdventurers: Adventurer[] = [];
+        let retiredAdventurers = gameState.retiredAdventurers;
+        let currentTurnAdventurers: Adventurer[] = gameState.adventurers;
+        let nextTurnAdventurers: Adventurer[]
+            ;
 
         while (currentTurnAdventurers.length > 0) {
-            console.debug(map.toString());
+            console.debug(logMap(map, [...currentTurnAdventurers, ...retiredAdventurers], 10));
             nextTurnAdventurers = [];
             currentTurnAdventurers.forEach(adv => {
                 const movement: Movement = adv.pathing[gameState.turn];
@@ -69,7 +71,7 @@ export class GameLoopService {
                     nextTurnAdventurers.push(adv);
                 }
             });
-            currentTurnAdventurers = [...nextTurnAdventurers];
+            currentTurnAdventurers = nextTurnAdventurers;
             gameState.turn += 1;
         }
 
@@ -106,6 +108,7 @@ export class GameLoopService {
     private calculateNewPosition(adventurer: Adventurer, map: GameMap): Adventurer | undefined {
         let newX: number = adventurer.position.x;
         let newY: number = adventurer.position.y;
+        const tileMap: Map<string, Tile> = map.tileMap;
         switch (adventurer.orientation) {
             case ORIENTATION.EST:
                 newX += 1;
@@ -121,16 +124,16 @@ export class GameLoopService {
                 break;
         }
         if (this.isAdventurerOutOfBond(newX, newY, map)) {
-            map.tileMap = this.handleAdventurerLeavingTile(adventurer.position, map.tileMap);
+            map.tileMap = this.handleAdventurerLeavingTile(adventurer.position, tileMap);
             return undefined;
         }
         const newPos = new Point(newX, newY);
-        let newTile: Tile | undefined = map.tileMap.get(newPos.toHash());
+        let newTile: Tile | undefined = tileMap.get(newPos.toHash());
         if (newTile?.biome === BIOME.MONTAGNE || newTile?.hasAdventurer === true) {
             return new Adventurer(adventurer.name, adventurer.position, adventurer.orientation, adventurer.pathing, adventurer.nbrTreasures, false);
         }
-        map.tileMap = this.handleAdventurerEnteringTile(newPos, map.tileMap);
-        map.tileMap = this.handleAdventurerLeavingTile(adventurer.position, map.tileMap);
+        map.tileMap = this.handleAdventurerEnteringTile(newPos, tileMap);
+        map.tileMap = this.handleAdventurerLeavingTile(adventurer.position, tileMap);
         return new Adventurer(adventurer.name, newPos, adventurer.orientation, adventurer.pathing, adventurer.nbrTreasures, false);
     }
 

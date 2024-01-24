@@ -24,7 +24,7 @@ describe('parseMapLine', () => {
     it('should throw an error: Negative coordinates', () => {
         const parsedLine = ['C', '3', '-4'];
         const lineNumber = 1;
-        expect(() => parseMapLine(parsedLine, lineNumber)).toThrow(`Invalid entry | line ${lineNumber}`);
+        expect(() => parseMapLine(parsedLine, lineNumber)).toThrow(`Map dimensions should be strictly positives | line ${lineNumber}`);
     });
 
     it('should throw an error: non-numeric', () => {
@@ -54,13 +54,18 @@ describe('parseTreasureLine', () => {
     it('should throw an error: Negative coordinates', () => {
         const parsedLine = ['T', '-3', '4', "3"];
         const lineNumber = 1;
-        expect(() => parseTreasureLine(parsedLine, lineNumber)).toThrow(`Invalid entry | line ${lineNumber}`);
+        expect(() => parseTreasureLine(parsedLine, lineNumber)).toThrow(`Negative coordinates | line ${lineNumber}`);
     });
 
     it('should throw an error: non-numeric', () => {
         const parsedLine = ['T', 'a', '4', "3"];
         const lineNumber = 1;
         expect(() => parseTreasureLine(parsedLine, lineNumber)).toThrow();
+    });
+    it('should throw an error: Number of treasures should be positive', () => {
+        const parsedLine = ['T', 'a', '4', "0"];
+        const lineNumber = 1;
+        expect(() => parseTreasureLine(parsedLine, lineNumber)).toThrow(`Non-numeric parameters | line ${lineNumber}`);
     });
 });
 

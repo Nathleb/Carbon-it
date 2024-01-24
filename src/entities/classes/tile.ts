@@ -7,9 +7,6 @@ export class Tile {
 
 
     constructor(biome: Biome, nbrTreasures: number, hasAdventurer: boolean) {
-        if (nbrTreasures < 0) {
-            throw new Error('nbrTreasures must be positive.');
-        }
         this._nbrTreasures = nbrTreasures;
         this._biome = biome;
         this._hasAdventurer = hasAdventurer;
@@ -44,9 +41,6 @@ export class Tile {
      * @param {number} value
      */
     public set nbrTreasures(value: number) {
-        if (value < 0) {
-            throw new Error('nbrTreasures must be positive.');
-        }
         this._nbrTreasures = value;
     }
 

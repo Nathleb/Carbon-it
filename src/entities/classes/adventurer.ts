@@ -96,9 +96,6 @@ export class Adventurer {
      * @param {number} value
      */
     public set nbrTreasures(value: number) {
-        if (value < 0) {
-            throw new Error('nbrTreasures must be positive.');
-        }
         this._nbrTreasures = value;
     }
 

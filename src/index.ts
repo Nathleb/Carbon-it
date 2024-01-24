@@ -9,7 +9,7 @@ function main() {
 
     parseSettingsService.parseSettingFile(filePath).then(
         res => {
-            gameLoopService.startGame(res);
+            console.log(gameLoopService.startGame(res));
         },
         err => {
             console.log(err);

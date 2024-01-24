@@ -3,10 +3,10 @@ import readline from 'node:readline';
 import { Adventurer } from "../entities/classes/adventurer";
 import { GameMap } from "../entities/classes/gameMap";
 import { GameState } from "../entities/classes/gameState";
-import { PARSECODE } from '../entities/enums/parseCode.enum';
 import { Point } from "../entities/classes/point";
 import { Tile } from "../entities/classes/tile";
 import { BIOME } from '../entities/types/biome.type';
+import { PARSINGCODE } from '../entities/types/parsingCodes.type';
 import { parseAdventurerLine, parseMapLine, parseMountainLine, parseTreasureLine } from '../managers/lineParser.manager';
 
 export class ParseSettingsService {
@@ -76,13 +76,13 @@ export class ParseSettingsService {
         }
 
         switch (parsedLine[0]) {
-            case PARSECODE.Carte:
+            case PARSINGCODE.Carte:
                 return parseMapLine(parsedLine, lineNumber);
-            case PARSECODE.Montagne:
+            case PARSINGCODE.Montagne:
                 return parseMountainLine(parsedLine, lineNumber);
-            case PARSECODE.Tresor:
+            case PARSINGCODE.Tresor:
                 return parseTreasureLine(parsedLine, lineNumber);
-            case PARSECODE.Aventurier:
+            case PARSINGCODE.Aventurier:
                 return parseAdventurerLine(parsedLine, lineNumber);
             default:
                 throw new Error(`${parsedLine[0]} is not a valid entry | line ${lineNumber}`);

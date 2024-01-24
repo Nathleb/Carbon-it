@@ -2,10 +2,10 @@ import { Adventurer } from "../entities/classes/adventurer";
 import { GameMap } from "../entities/classes/gameMap";
 import { Point } from "../entities/classes/point";
 import { Tile } from "../entities/classes/tile";
-import { PARSECODE } from "../entities/enums/parseCode.enum";
 import { BIOME } from "../entities/types/biome.type";
 import { Movement } from "../entities/types/movement.type";
 import { Orientation } from "../entities/types/orientation.type";
+import { PARSINGCODE } from "../entities/types/parsingCodes.type";
 import { toMovementArray } from "../utils/movement.utils";
 import { toOrientation } from "../utils/orientation.utils";
 
@@ -24,6 +24,9 @@ export function parseMapLine(parsedLine: string[], lineNumber: number): GameMap 
 
     if (isNaN(width) || isNaN(height)) {
         throw new Error(`Non-numeric parameters | line ${lineNumber}`);
+    }
+    if (width < 1 || height < 1) {
+        throw new Error(`Map dimensions should be strictly positives | line ${lineNumber}`);
     }
 
     try {
@@ -51,13 +54,13 @@ export function parseTreasureLine(parsedLine: string[], lineNumber: number): [Po
     if (isNaN(x) || isNaN(y) || isNaN(nbrTreasures)) {
         throw new Error(`Non-numeric parameters | line ${lineNumber}`);
     }
-
-    try {
-        return [new Point(x, y), new Tile(BIOME.PLAINE, nbrTreasures, false)];
+    if (x < 0 || y < 0) {
+        throw new Error(`Negative coordinates | line ${lineNumber}`);
     }
-    catch (error) {
-        throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
+    if (nbrTreasures <= 0) {
+        throw new Error(`Number of treasures should be stricly positive | line ${lineNumber}`);
     }
+    return [new Point(x, y), new Tile(BIOME.PLAINE, nbrTreasures, false)];
 }
 
 /**
@@ -78,6 +81,9 @@ export function parseAdventurerLine(parsedLine: string[], lineNumber: number): A
     if (isNaN(x) || isNaN(y)) {
         throw new Error(`Non-numeric parameters | line ${lineNumber}`);
     }
+    if (x < 0 || y < 0) {
+        throw new Error(`Negative coordinates | line ${lineNumber}`);
+    }
 
     const orientation: Orientation | undefined = toOrientation(parsedLine[4]);
     const pathing: Movement[] | undefined = toMovementArray(parsedLine[5].split(""));
@@ -85,12 +91,8 @@ export function parseAdventurerLine(parsedLine: string[], lineNumber: number): A
     if (pathing === undefined || orientation === undefined) {
         throw new Error(`Invalid entry | line ${lineNumber}`);
     }
-    try {
-        return new Adventurer(name, new Point(x, y), orientation, pathing, 0, false);
-    }
-    catch (error) {
-        throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
-    }
+
+    return new Adventurer(name, new Point(x, y), orientation, pathing, 0, false);
 }
 
 /**
@@ -109,11 +111,10 @@ export function parseMountainLine(parsedLine: string[], lineNumber: number): [Po
     if (isNaN(x) || isNaN(y)) {
         throw new Error(`Non-numeric parameters | line ${lineNumber}`);
     }
+    if (x < 0 || y < 0) {
+        throw new Error(`Negative coordinates | line ${lineNumber}`);
+    }
 
-    try {
-        return [new Point(x, y), new Tile(PARSECODE.Montagne, 0, false)];
-    }
-    catch (error) {
-        throw new Error(`Invalid entry | line ${lineNumber}: ${error}`);
-    }
+
+    return [new Point(x, y), new Tile(PARSINGCODE.Montagne, 0, false)];
 }
