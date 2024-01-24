@@ -4,12 +4,13 @@ import { Point } from "../entities/classes/point";
 import { Tile } from "../entities/classes/tile";
 import { BIOME } from "../entities/types/biome.type";
 import { Adventurer } from "../entities/classes/adventurer";
+import { PARSINGCODE } from "../entities/types/parsingCodes.type";
 
 
-export function logFinalGameState(gameState: GameState): string {
+export function gameStateToString(gameState: GameState): string {
 
     const map: GameMap = gameState.gameMap;
-    let gameStateString: string = `C - ${map.width} - ${map.height}\n`;
+    let gameStateString: string = `${PARSINGCODE.Carte} - ${map.width} - ${map.height}\n`;
     let biomeString = "";
     let treasureString = "";
     let adventurerString = "";
@@ -17,7 +18,7 @@ export function logFinalGameState(gameState: GameState): string {
     map.tileMap.forEach((tile: Tile, hash: string) => {
         const [x, y] = hash.split("-");
         if (tile.nbrTreasures > 0) {
-            treasureString += `T - ${x} - ${y} - ${tile.nbrTreasures}\n`;
+            treasureString += `${PARSINGCODE.Tresor}- ${x} - ${y} - ${tile.nbrTreasures}\n`;
         }
         if (tile.biome !== BIOME.PLAINE) {
             biomeString += `${tile.biome} - ${x} - ${y}\n`;
@@ -27,8 +28,8 @@ export function logFinalGameState(gameState: GameState): string {
     gameStateString += biomeString + treasureString;
     gameState.retiredAdventurers.forEach((adv) => {
         adventurerString += adv.isOutOfBond
-            ? ``
-            : `A - ${adv.name} - ${adv.position.x} - ${adv.position.y} - ${adv.orientation} - ${adv.nbrTreasures}\n`;
+            ? `${PARSINGCODE.AventurierRetaite} - ${adv.name} - ${adv.nbrTreasures}\n`
+            : `${PARSINGCODE.Aventurier} - ${adv.name} - ${adv.position.x} - ${adv.position.y} - ${adv.orientation} - ${adv.nbrTreasures}\n`;
     });
 
     return gameStateString + adventurerString;

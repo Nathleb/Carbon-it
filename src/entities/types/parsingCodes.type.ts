@@ -6,5 +6,6 @@ export enum PARSINGCODE {
     Carte = "C",
     Montagne = "M",
     Aventurier = "A",
+    AventurierRetaite = "R",
     Tresor = "T",
 }

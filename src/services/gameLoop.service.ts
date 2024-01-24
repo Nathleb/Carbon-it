@@ -6,7 +6,7 @@ import { Tile } from "../entities/classes/tile";
 import { BIOME } from "../entities/types/biome.type";
 import { MOUVEMENT, Movement } from "../entities/types/movement.type";
 import { calculateCoordinateAfterMovement, handleAdventurerEnteringTile, handleAdventurerLeavingTile, isAdventurerOutOfBond, rotateAdventurer } from "../managers/adventurerMovement.manager";
-import { logMap } from "./gameLog.service";
+import { logMap } from "../managers/gameLog.manager";
 
 export class GameLoopService {
 

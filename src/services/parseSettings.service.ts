@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import readline from 'node:readline';
 import { Adventurer } from "../entities/classes/adventurer";
 import { GameMap } from "../entities/classes/gameMap";
 import { GameState } from "../entities/classes/gameState";
@@ -13,21 +11,14 @@ export class ParseSettingsService {
 
     readonly SEPARATOR: string = " - ";
 
-    public async parseSettingFile(filePath: string): Promise<GameState> {
-
-        const fileStream = fs.createReadStream(filePath);
-        const rl = readline.createInterface({
-            input: fileStream,
-            crlfDelay: Infinity,
-        });
-
+    public parseSettingFile(lines: string[]): GameState {
         let adventurers: Adventurer[] = [];
         let tileMap: Map<string, Tile> = new Map<string, Tile>();
         let gameMap: GameMap | null = null;
 
         let lineNumber = 1;
 
-        for await (const line of rl) {
+        for (const line of lines) {
             const parsedLineResult = this.parseLine(line.trim(), lineNumber);
             if (parsedLineResult === undefined) {
                 continue;
