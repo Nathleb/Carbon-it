@@ -13,7 +13,7 @@ import { toOrientation } from "../utils/orientation.utils";
  * Parse line that gives the map dimensions
  * @param parsedLine 
  * @param lineNumber 
- * @returns 
+ * @returns GameMap with empty tileMap
  */
 export function parseMapLine(parsedLine: string[], lineNumber: number): GameMap {
     if (parsedLine.length !== 3) {
@@ -41,7 +41,7 @@ export function parseMapLine(parsedLine: string[], lineNumber: number): GameMap 
  * Parse line that gives the position of a treasure
  * @param parsedLine 
  * @param lineNumber 
- * @returns 
+ * @returns Tile with only treasures
  */
 export function parseTreasureLine(parsedLine: string[], lineNumber: number): [Point, Tile] {
     if (parsedLine.length !== 4) {
@@ -67,7 +67,7 @@ export function parseTreasureLine(parsedLine: string[], lineNumber: number): [Po
  * Parse parameter line for a new adventurer
  * @param parsedLine 
  * @param lineNumber 
- * @returns 
+ * @returns Adventurer
  */
 export function parseAdventurerLine(parsedLine: string[], lineNumber: number): Adventurer {
     if (parsedLine.length !== 6) {
