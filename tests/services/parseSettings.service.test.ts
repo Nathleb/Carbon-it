@@ -6,7 +6,7 @@ jest.mock('readline');
 jest.mock('fs');
 
 describe('ParseSettingsService', () => {
-    let parseSettingsService: ParseSettingsService;
+    let parseSettingsService: ParseSettingsService = new ParseSettingsService();
 
     afterEach(() => {
         jest.restoreAllMocks();
@@ -31,39 +31,37 @@ describe('ParseSettingsService', () => {
         it('should throw an error: Negative x coordinate Map', () => {
             const map = ["M - -1 - 0"];
 
-            return expect(parseSettingsService.parseSettingFile(map)).rejects.toThrow();
+            return expect(() => parseSettingsService.parseSettingFile(map)).toThrow("Negative coordinates | line 1");
         });
 
         it('should throw an error: Negative y coordinate map', () => {
             const map = ["M - 2 - -1"];
 
-            return expect(parseSettingsService.parseSettingFile(map)).rejects.toThrow();
+            return expect(() => parseSettingsService.parseSettingFile(map)).toThrow("Negative coordinates | line 1");
         });
 
         it('should throw an error: No line starting with C', () => {
             const map = ["M - 2 - 1"];
 
-            return expect(parseSettingsService.parseSettingFile(map)).rejects.toThrow();
+            return expect(() => parseSettingsService.parseSettingFile(map)).toThrow();
         });
 
         it('should throw an error: Wrong pathing', () => {
             const map = [" A - John - 1 - 1 - N - AADADAGGE"];
 
-            return expect(parseSettingsService.parseSettingFile(map)).rejects.toThrow();
+            return expect(() => parseSettingsService.parseSettingFile(map)).toThrow();
         });
 
         it('should throw an error: Negative starting position', () => {
             const map = [" A - John - -1 - 1 - E - AADADAGG"];
 
-            return expect(parseSettingsService.parseSettingFile(map)).rejects.toThrow();
+            return expect(() => parseSettingsService.parseSettingFile(map)).toThrow();
         });
 
         it('should throw an error: E is not a parsingCode', () => {
             const map = [" E - John - -1 - 1 - E - AADADAGG"];
 
-            return expect(parseSettingsService.parseSettingFile(map)).rejects.toThrow("E is not a valid entry | line 1");
+            return expect(() => parseSettingsService.parseSettingFile(map)).toThrow("E is not a valid entry | line 1");
         });
-
-
     });
 });
