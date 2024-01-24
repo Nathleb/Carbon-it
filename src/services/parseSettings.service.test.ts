@@ -1,6 +1,6 @@
-import { ParseSettingsService } from '../../src/services/parseSettings.service';
-import { GameState } from '../../src/entities/classes/gameState';
-import { Point } from '../../src/entities/classes/point';
+import { ParseSettingsService } from './parseSettings.service';
+import { GameState } from '../entities/classes/gameState';
+import { Point } from '../entities/classes/point';
 
 jest.mock('readline');
 jest.mock('fs');

@@ -4,9 +4,11 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "tsc-start": "tsc && node dist/src/index.js",
+    "build": "tsc",
+    "build-start": "tsc && node dist/src/index.js",
     "start": "node dist/src/index.js",
-    "test": "tsc && jest"
+    "test": "jest",
+    "build-test": "tsc && jest"
   },
   "keywords": [],
   "author": "",
